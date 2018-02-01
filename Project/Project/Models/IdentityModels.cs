@@ -1,8 +1,11 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Project.Models;
 
 namespace Project.Models
 {
@@ -25,9 +28,31 @@ namespace Project.Models
         {
         }
 
+        public DbSet<Player> Players { get; set; }
+        public DbSet<Selections> Selections { get; set; }
+        public DbSet<Squads> Squads { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+        }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
     }
+
+    //public class test : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    //{
+    //    protected override void Seed(ApplicationDbContext context)
+    //    {
+    //        var players = new List<Player>
+    //        {
+    //            new Player{FirstName="Ruairí", LastName="Keogh", Position="Forward"}
+    //        };
+    //        players.ForEach(p => context.Players.Add(p));
+    //        context.SaveChanges();
+    //    }
+    //}
 }
